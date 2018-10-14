@@ -1,0 +1,21 @@
+{
+  "name": "impendulo-api",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "nodemon": "nodemon",
+    "start": "ts-node src",
+    "lint": "tslint"
+  },
+  "dependencies": {
+    "koa": "^2.5.3",
+    "ts-node": "^7.0.1"
+  },
+  "devDependencies": {
+    "@types/koa": "^2.0.46",
+    "nodemon": "^1.18.4",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.15.0",
+    "typescript": "^3.1.3"
+  }
+}
