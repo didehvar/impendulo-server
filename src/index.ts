@@ -23,7 +23,7 @@ app.use(async ctx => {
   ctx.body = 'Hello World';
 });
 
-if (process.env.NODE_ENV === 'development') {
+if (process.env.HTTPS) {
   https
     .createServer(
       {
