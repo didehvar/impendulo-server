@@ -4,7 +4,9 @@ import * as fs from 'fs';
 import { graphql } from 'graphql';
 import * as https from 'https';
 import * as Koa from 'koa';
+import * as helmet from 'koa-helmet';
 import * as logger from 'koa-logger';
+import * as enforceHttps from 'koa-sslify';
 
 import makeSchema from './schema';
 
@@ -15,6 +17,13 @@ const bootstrap = async () => {
   if (process.env.NODE_ENV === 'development') {
     app.use(logger());
   }
+
+  app.use(helmet());
+  app.use(
+    enforceHttps({
+      trustProtoHeader: true,
+    }),
+  );
 
   app.use(
     cors({
