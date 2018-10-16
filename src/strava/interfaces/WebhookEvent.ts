@@ -11,12 +11,20 @@ interface UpdateDeauthorization {
   authroized: false;
 }
 
-export default interface WebhookEvent {
+interface BaseWebhook {
   objectType: ObjectType;
   objectId: number;
   aspectType: AspectType;
   updates: UpdateActivity | UpdateDeauthorization;
   ownerId: number;
   subscriptionId: number;
-  eventTime: number;
+  eventTime: number | string;
+}
+
+export interface StravaWebhookEvent extends BaseWebhook {
+  eventTime: number; // seconds
+}
+
+export default interface WebhookEvent extends BaseWebhook {
+  eventTime: string; // ISO8601
 }

@@ -25,7 +25,7 @@ class GraphQLService {
 
   async init() {
     this.initialised = true;
-    this.schema = await makeSchema();
+    this.schema = await makeSchema(this.logger);
   }
 
   async query<TData = ExecutionResultDataDefault>(
@@ -63,7 +63,7 @@ class GraphQLService {
     }
 
     if (result.errors) {
-      this.logger.error(result.errors, 'GraphQLService query errors');
+      this.logger.error(result, 'GraphQLService query errors');
     }
 
     return result;

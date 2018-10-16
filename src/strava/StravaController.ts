@@ -3,6 +3,7 @@ import config from 'src/config';
 import camelCaseObject from 'src/core/utils/camelCaseObject';
 
 import VerifyWebhook from './interfaces/VerifyWebhook';
+import { StravaWebhookEvent } from './interfaces/WebhookEvent';
 import StravaService from './StravaService';
 
 class StravaController {
@@ -34,9 +35,14 @@ class StravaController {
   };
 
   webhook: Koa.Middleware = async ctx => {
-    ctx.body = await this.service.saveWebhook(
-      camelCaseObject(ctx.request.body),
-    );
+    const event: StravaWebhookEvent = camelCaseObject(ctx.request.body);
+    const result = await this.service.saveWebhook({
+      ...event,
+      eventTime: new Date(event.eventTime * 1000).toISOString(),
+    });
+
+    if (result.errors) ctx.throw(500, 'Webhook failed to save');
+    ctx.body = result;
   };
 }
 

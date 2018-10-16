@@ -8,7 +8,12 @@ import StravaService from './strava/StravaService';
 const createRouter = async (logger: pino.Logger) => {
   const router = new KoaRouter();
   const graphQLService = new GraphQLService(logger);
-  await graphQLService.init();
+
+  try {
+    await graphQLService.init();
+  } catch (ex) {
+    throw new Error(`Failed to init GraphQLService: ${ex.message}`);
+  }
 
   // -- strava --
   const stravaService = new StravaService(graphQLService);
