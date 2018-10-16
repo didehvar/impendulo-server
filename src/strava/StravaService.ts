@@ -10,6 +10,8 @@ import GraphQLService from 'src/core/GraphQLService';
 import CreateSubscription from './interfaces/CreateSubscription';
 import Subscription from './interfaces/Subscription';
 import insertSubscriptions from './queries/insertSubscriptions';
+import WebhookEvent from './interfaces/WebhookEvent';
+import insertWebhooks from './queries/insertWebhooks';
 
 class StravaService {
   private graphql: GraphQLService;
@@ -61,6 +63,12 @@ class StravaService {
           stravaSubId: data.id,
         },
       ],
+    });
+  }
+
+  saveWebhook(event: WebhookEvent) {
+    return this.graphql.query(insertWebhooks, {
+      objects: [event],
     });
   }
 }

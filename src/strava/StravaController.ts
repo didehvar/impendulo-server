@@ -32,6 +32,12 @@ class StravaController {
       'hub.challenge': hub.hubChallenge,
     };
   };
+
+  webhook: Koa.Middleware = async ctx => {
+    ctx.body = await this.service.saveWebhook(
+      camelCaseObject(ctx.request.body),
+    );
+  };
 }
 
 export default StravaController;

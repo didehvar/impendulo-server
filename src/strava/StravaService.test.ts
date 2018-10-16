@@ -7,8 +7,12 @@ import config from 'src/config';
 import { graphQLMock, graphQLService } from 'src/core/testHelpers';
 import snakeCaseObject from 'src/core/utils/snakeCaseObject';
 
+import WebhookEvent from './interfaces/WebhookEvent';
 import insertSubscriptions from './queries/insertSubscriptions';
+import insertWebhooks from './queries/insertWebhooks';
 import StravaService from './StravaService';
+import ObjectType from './interfaces/ObjectType';
+import AspectType from './interfaces/AspectType';
 
 jest.mock('node-fetch');
 
@@ -49,7 +53,7 @@ describe('subscribe', () => {
     );
   });
 
-  test('saves the webhook', async () => {
+  test('saves the subscription', async () => {
     await service.subscribeToWebhooks(data);
 
     expect(graphQLMock.query).toHaveBeenCalledWith(insertSubscriptions, {
@@ -70,5 +74,24 @@ describe('subscribe', () => {
     });
 
     expect(service.subscribeToWebhooks(data)).rejects.toThrow();
+  });
+});
+
+describe('saveWebhook', () => {
+  const data: WebhookEvent = {
+    aspectType: AspectType.Update,
+    eventTime: 1516126040,
+    objectId: 1360128428,
+    objectType: ObjectType.Activity,
+    ownerId: 134815,
+    subscriptionId: 120475,
+    updates: { title: 'Messy' },
+  };
+
+  test('saves the webhook', async () => {
+    await service.saveWebhook(data);
+    expect(graphQLMock.query).toHaveBeenCalledWith(insertWebhooks, {
+      objects: [data],
+    });
   });
 });

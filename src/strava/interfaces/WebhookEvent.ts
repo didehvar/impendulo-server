@@ -11,12 +11,12 @@ interface UpdateDeauthorization {
   authroized: false;
 }
 
-export default interface Webhook {
+export default interface WebhookEvent {
   objectType: ObjectType;
   objectId: number;
   aspectType: AspectType;
   updates: UpdateActivity | UpdateDeauthorization;
   ownerId: number;
-  subcriptionId: number;
+  subscriptionId: number;
   eventTime: number;
 }

@@ -2,8 +2,7 @@ import * as Koa from 'koa';
 
 const errorHandler: Koa.Middleware = async (ctx, next) => {
   try {
-    const result = await next();
-    console.log('result', result);
+    await next();
   } catch (err) {
     ctx.log.error(err);
     ctx.status = err.statusCode || err.status || 500;
