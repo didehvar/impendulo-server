@@ -7,13 +7,22 @@ import * as bodyParser from 'koa-bodyparser';
 import * as helmet from 'koa-helmet';
 import * as devLogger from 'koa-logger';
 import * as enforceHttps from 'koa-sslify';
+import * as pino from 'pino';
 
 import config from './config';
+import errorHandler from './core/errorHandler';
 import createRouter from './routes';
 
 const bootstrap = async () => {
+  const loggerOptions = { prettyPrint: config.DEV };
+  const logger = pino(loggerOptions);
+
   const app = new Koa();
+
+  app.context.log = logger;
   app.proxy = true;
+
+  app.use(errorHandler);
 
   if (config.DEV) {
     app.use(devLogger());
@@ -34,7 +43,7 @@ const bootstrap = async () => {
   );
   app.use(bodyParser());
 
-  const router = await createRouter();
+  const router = await createRouter(logger);
   app.use(router.routes());
 
   if (config.HTTPS) {

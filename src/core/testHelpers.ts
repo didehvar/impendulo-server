@@ -2,12 +2,14 @@ import { IncomingMessage, ServerResponse } from 'http';
 import * as Koa from 'koa';
 import * as Stream from 'stream';
 import { mocked } from 'ts-jest/utils';
+import * as pino from 'pino';
 
 import GraphQLService from './GraphQLService';
 
 jest.mock('src/core/GraphQLService');
 
-export const graphQLService = new GraphQLService();
+export const pinoMock = mocked(pino());
+export const graphQLService = new GraphQLService(pinoMock as any);
 export const graphQLMock = mocked(graphQLService);
 
 export const mockNext = () => Promise.resolve();

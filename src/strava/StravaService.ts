@@ -43,14 +43,20 @@ class StravaService {
       },
     );
 
+    if (fetchResult.status !== 200) {
+      throw new Error(
+        `Call to Strava failed with status ${fetchResult.status}`,
+      );
+    }
+
     const data = camelCaseObject(await fetchResult.json()) as Subscription;
 
     return this.graphql.query(insertSubscriptions, {
       objects: [
         {
           callbackUrl,
-          stravaId: data.id,
-          verifyToken,
+          clientId,
+          stravaSubId: data.id,
         },
       ],
     });

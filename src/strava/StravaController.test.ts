@@ -19,12 +19,6 @@ describe('subscribe', () => {
   config.STRAVA_CLIENT_SECRET = 'abcdefimasecretghijklmnop';
   config.STRAVA_VERIFY_TOKEN = 'verifymepls';
 
-  test('returns 200 status', async () => {
-    await controller.subscribe(context, mockNext);
-
-    expect(context.status).toEqual(200);
-  });
-
   test('subscribes to webhooks', async () => {
     await controller.subscribe(context, mockNext);
 

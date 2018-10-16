@@ -1,12 +1,13 @@
 import * as KoaRouter from 'koa-router';
+import * as pino from 'pino';
 
 import GraphQLService from './core/GraphQLService';
 import StravaController from './strava/StravaController';
 import StravaService from './strava/StravaService';
 
-const createRouter = async () => {
+const createRouter = async (logger: pino.Logger) => {
   const router = new KoaRouter();
-  const graphQLService = new GraphQLService();
+  const graphQLService = new GraphQLService(logger);
   await graphQLService.init();
 
   // -- strava --

@@ -29,6 +29,7 @@ describe('subscribe', () => {
       json: () => ({
         id: stravaSubscriptionId,
       }),
+      status: 200,
     });
   });
 
@@ -53,8 +54,8 @@ describe('subscribe', () => {
       objects: [
         {
           callbackUrl: data.callbackUrl,
-          stravaId: stravaSubscriptionId,
-          verifyToken: data.verifyToken,
+          clientId: data.clientId,
+          stravaSubId: stravaSubscriptionId,
         },
       ],
     });
