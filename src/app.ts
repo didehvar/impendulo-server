@@ -28,12 +28,16 @@ const bootstrap = async () => {
     app.use(devLogger());
   }
 
+  if (config.PROD) {
+    app.use(
+      enforceHttps({
+        trustProtoHeader: true,
+      }),
+    );
+  }
+
   app.use(helmet());
-  app.use(
-    enforceHttps({
-      trustProtoHeader: true,
-    }),
-  );
+
   app.use(
     cors({
       allowHeaders: 'Authorization',

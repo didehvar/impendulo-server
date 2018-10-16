@@ -23,13 +23,15 @@ describe('subscribe', () => {
     clientSecret: 'abcdefimasecretghijklmnop',
     verifyToken: 'verifymepls',
   };
+  const json = () => ({
+    id: stravaSubscriptionId,
+  });
 
   beforeAll(() => {
     fetchMock.mockReturnValue({
-      json: () => ({
-        id: stravaSubscriptionId,
-      }),
-      status: 200,
+      json,
+      status: 201,
+      text: () => 'text',
     });
   });
 
@@ -59,5 +61,14 @@ describe('subscribe', () => {
         },
       ],
     });
+  });
+
+  test('throws an error if call fails', async () => {
+    fetchMock.mockReturnValue({
+      json,
+      status: 500,
+    });
+
+    expect(service.subscribeToWebhooks(data)).rejects.toThrow();
   });
 });

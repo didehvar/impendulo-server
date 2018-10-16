@@ -17,3 +17,14 @@ test('camel cases an object recursively', () => {
     notCamel: obj.NOT_CAMEL,
   });
 });
+
+test('camel cases arrays', () => {
+  const arr = [{ Obi: 'hello' }, 'there'];
+
+  expect(camelCaseObject(arr)).toStrictEqual([
+    {
+      obi: (arr[0] as any).Obi,
+    },
+    arr[1],
+  ]);
+});

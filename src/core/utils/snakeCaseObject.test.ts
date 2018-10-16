@@ -1,6 +1,6 @@
 import snakeCaseObject from './snakeCaseObject';
 
-test('camel cases an object recursively', () => {
+test('snake cases an object recursively', () => {
   const obj = {
     NOT_CAMEL: true,
     isCamel: {
@@ -16,4 +16,15 @@ test('camel cases an object recursively', () => {
     },
     not_camel: obj.NOT_CAMEL,
   });
+});
+
+test('snake cases arrays', () => {
+  const arr = [{ 'Obi-Wan': 'hello' }, 'there'];
+
+  expect(snakeCaseObject(arr)).toStrictEqual([
+    {
+      obi_wan: (arr[0] as any)['Obi-Wan'],
+    },
+    arr[1],
+  ]);
 });

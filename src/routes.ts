@@ -13,10 +13,9 @@ const createRouter = async (logger: pino.Logger) => {
   // -- strava --
   const stravaService = new StravaService(graphQLService);
   const stravaController = new StravaController(stravaService);
-  const stravaRouter = new KoaRouter({ prefix: '/strava' }).get(
-    '/subscribe',
-    stravaController.subscribe,
-  );
+  const stravaRouter = new KoaRouter({ prefix: '/strava' })
+    .get('/subscribe', stravaController.subscribe)
+    .get('/callback', stravaController.verifyWebhook);
   router.use(stravaRouter.routes());
 
   return router;

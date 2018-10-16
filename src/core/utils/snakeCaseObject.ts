@@ -1,7 +1,7 @@
 import { snakeCase } from 'lodash';
 import { isArray, isObject } from 'util';
 
-const snakeCaseObject = (obj: object): object => {
+const snakeCaseObject = (obj: any): any => {
   if (isArray(obj)) {
     return obj.map(value => {
       if (isObject(value)) {
@@ -14,9 +14,6 @@ const snakeCaseObject = (obj: object): object => {
 
   return Object.keys(obj).reduce((acc, key) => {
     let value = obj[key];
-    if (!obj.hasOwnProperty(key)) {
-      return acc;
-    }
 
     if (isObject(value)) {
       value = snakeCaseObject(value);

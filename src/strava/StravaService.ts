@@ -43,9 +43,11 @@ class StravaService {
       },
     );
 
-    if (fetchResult.status !== 200) {
+    if (fetchResult.status !== 201) {
       throw new Error(
-        `Call to Strava failed with status ${fetchResult.status}`,
+        `Call to Strava failed with status ${
+          fetchResult.status
+        }: ${await fetchResult.text()}`,
       );
     }
 
