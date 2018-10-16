@@ -1,7 +1,7 @@
 import { mocked } from 'ts-jest/utils';
 
 import config from 'src/config';
-import { createContext, graphQLService } from 'src/core/testHelpers';
+import { createContext, graphQLService, mockNext } from 'src/core/testHelpers';
 
 import StravaController from './StravaController';
 import StravaService from './StravaService';
@@ -20,7 +20,7 @@ describe('subscribe', () => {
   config.STRAVA_VERIFY_TOKEN = 'verifymepls';
 
   test('subscribes to webhooks', () => {
-    controller.subscribe(context);
+    controller.subscribe(context, mockNext);
 
     expect(serviceMock.subscribeToWebhooks).toHaveBeenCalledWith({
       callbackUrl: hostname,

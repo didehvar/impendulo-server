@@ -1,5 +1,4 @@
 import * as Koa from 'koa';
-import { ComposedMiddleware } from 'koa-compose';
 
 import config from 'src/config';
 
@@ -12,8 +11,8 @@ class StravaController {
     this.service = stravaService;
   }
 
-  subscribe: ComposedMiddleware<Koa.Context> = async ctx => {
-    await this.service.subscribeToWebhooks({
+  subscribe: Koa.Middleware = async ctx => {
+    return this.service.subscribeToWebhooks({
       callbackUrl: ctx.hostname,
       clientId: config.STRAVA_CLIENT_ID,
       clientSecret: config.STRAVA_CLIENT_SECRET,

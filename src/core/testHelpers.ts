@@ -10,6 +10,8 @@ jest.mock('src/core/GraphQLService');
 export const graphQLService = new GraphQLService();
 export const graphQLMock = mocked(graphQLService);
 
+export const mockNext = () => Promise.resolve();
+
 // https://github.com/koajs/koa/blob/master/test/helpers/context.js
 export const createContext = (
   req?: IncomingMessage,
