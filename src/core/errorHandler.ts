@@ -9,7 +9,7 @@ const errorHandler: Koa.Middleware = async (ctx, next) => {
     ctx.status = err.statusCode || err.status || 500;
     ctx.body = {
       error: true,
-      message: err.message,
+      message: err.expose ? err.toString() : ctx.message,
     };
   }
 };
