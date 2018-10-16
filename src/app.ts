@@ -5,17 +5,18 @@ import * as https from 'https';
 import * as Koa from 'koa';
 import * as bodyParser from 'koa-bodyparser';
 import * as helmet from 'koa-helmet';
-import * as logger from 'koa-logger';
+import * as devLogger from 'koa-logger';
 import * as enforceHttps from 'koa-sslify';
 
 import config from './config';
+import createRouter from './routes';
 
 const bootstrap = async () => {
   const app = new Koa();
   app.proxy = true;
 
-  if (config.NODE_ENV === 'development') {
-    app.use(logger());
+  if (config.DEV) {
+    app.use(devLogger());
   }
 
   app.use(helmet());
@@ -32,6 +33,9 @@ const bootstrap = async () => {
     }),
   );
   app.use(bodyParser());
+
+  const router = await createRouter();
+  app.use(router.routes());
 
   if (config.HTTPS) {
     https

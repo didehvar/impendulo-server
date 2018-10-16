@@ -12,12 +12,13 @@ class StravaController {
   }
 
   subscribe: Koa.Middleware = async ctx => {
-    return this.service.subscribeToWebhooks({
+    await this.service.subscribeToWebhooks({
       callbackUrl: ctx.hostname,
       clientId: config.STRAVA_CLIENT_ID,
       clientSecret: config.STRAVA_CLIENT_SECRET,
       verifyToken: config.STRAVA_VERIFY_TOKEN,
     });
+    ctx.status = 200;
   };
 }
 

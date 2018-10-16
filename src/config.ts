@@ -10,6 +10,7 @@ const {
 
 const options = {
   APP_URL,
+  DEV: NODE_ENV === 'development',
   HTTPS: Boolean(HTTPS),
   NODE_ENV,
   PORT: Number(PORT),

@@ -15,8 +15,10 @@ interface QueryArgs extends GraphQLArgs {
 
 class GraphQLService {
   private schema: GraphQLSchema;
+  private initialised = false;
 
   async init() {
+    this.initialised = true;
     this.schema = await makeSchema();
   }
 
@@ -28,6 +30,10 @@ class GraphQLService {
     args: QueryArgs | Source | string,
     variableValues?: QueryArgs['variableValues'],
   ): Promise<ExecutionResult<TData>> {
+    if (!this.initialised) {
+      throw new Error('GraphQLService not initialised');
+    }
+
     if (typeof args === 'string' || args instanceof Source) {
       if (variableValues) {
         return graphql(this.schema, args, null, null, variableValues);
