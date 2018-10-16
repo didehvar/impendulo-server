@@ -15,7 +15,8 @@
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true,
-    "lib": ["es2017", "dom", "esnext.asynciterable"]
+    "lib": ["es2017", "dom", "esnext.asynciterable"],
+    "typeRoots": ["./node_modules/@types", "./typings"]
   },
-  "include": ["src/**/*"]
+  "exclude": ["node_modules", "build"]
 }

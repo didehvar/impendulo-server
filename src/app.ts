@@ -1,20 +1,20 @@
 import * as cors from '@koa/cors';
 import 'dotenv/config';
 import * as fs from 'fs';
-import { graphql } from 'graphql';
 import * as https from 'https';
 import * as Koa from 'koa';
+import * as bodyParser from 'koa-bodyparser';
 import * as helmet from 'koa-helmet';
 import * as logger from 'koa-logger';
 import * as enforceHttps from 'koa-sslify';
 
-import makeSchema from './schema';
+import config from './config';
 
 const bootstrap = async () => {
   const app = new Koa();
-  const schema = await makeSchema();
+  app.proxy = true;
 
-  if (process.env.NODE_ENV === 'development') {
+  if (config.NODE_ENV === 'development') {
     app.use(logger());
   }
 
@@ -24,28 +24,16 @@ const bootstrap = async () => {
       trustProtoHeader: true,
     }),
   );
-
   app.use(
     cors({
       allowHeaders: 'Authorization',
       allowMethods: 'GET,POST',
-      origin: process.env.APP_URL,
+      origin: config.APP_URL,
     }),
   );
+  app.use(bodyParser());
 
-  app.use(async ctx => {
-    const query = `{
-      users {
-        id
-        email
-        firstname
-      }
-    }`;
-    const result = await graphql(schema, query);
-    ctx.body = result;
-  });
-
-  if (process.env.HTTPS) {
+  if (config.HTTPS) {
     https
       .createServer(
         {
@@ -54,9 +42,9 @@ const bootstrap = async () => {
         },
         app.callback(),
       )
-      .listen(process.env.PORT);
+      .listen(config.PORT);
   } else {
-    app.listen(process.env.PORT);
+    app.listen(config.PORT);
   }
 };
 

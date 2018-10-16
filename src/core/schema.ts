@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import { print, GraphQLSchema } from 'graphql';
 import { introspectSchema, makeRemoteExecutableSchema } from 'graphql-tools';
 import { Fetcher } from 'graphql-tools/dist/stitching/makeRemoteExecutableSchema';
