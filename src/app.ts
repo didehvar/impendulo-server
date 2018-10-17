@@ -47,8 +47,12 @@ const bootstrap = async () => {
   );
   app.use(bodyParser());
 
-  const router = await createRouter(logger);
-  app.use(router.routes());
+  try {
+    const router = await createRouter(logger);
+    app.use(router.routes());
+  } catch (ex) {
+    logger.fatal(ex, 'Failed to init router');
+  }
 
   if (config.HTTPS) {
     https
