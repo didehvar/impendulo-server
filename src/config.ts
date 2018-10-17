@@ -1,5 +1,6 @@
 const {
   APP_URL,
+  BASE_URL,
   DATABASE_URL,
   HASURA_KEY,
   HASURA_URL,
@@ -13,6 +14,7 @@ const {
 
 const config = {
   APP_URL,
+  BASE_URL,
   DATABASE_URL,
   DEV: NODE_ENV === 'development',
   HASURA_KEY,
@@ -22,7 +24,7 @@ const config = {
   PORT: Number(PORT),
   PROD: NODE_ENV === 'production',
   STRAVA_API_URL: 'https://api.strava.com/api/v3',
-  STRAVA_CALLBACK_URL: `${APP_URL}/strava/callback`,
+  STRAVA_CALLBACK_URL: `${BASE_URL}/strava/callback`,
   STRAVA_CLIENT_ID: Number(STRAVA_CLIENT_ID),
   STRAVA_CLIENT_SECRET,
   STRAVA_VERIFY_TOKEN,

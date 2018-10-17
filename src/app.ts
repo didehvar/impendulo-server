@@ -6,7 +6,7 @@ import * as Koa from 'koa';
 import * as bodyParser from 'koa-bodyparser';
 import * as helmet from 'koa-helmet';
 import * as devLogger from 'koa-logger';
-import * as enforceHttps from 'koa-sslify';
+// import * as enforceHttps from 'koa-sslify';
 import * as pino from 'pino';
 
 import config from './config';
@@ -28,13 +28,13 @@ const bootstrap = async () => {
     app.use(devLogger());
   }
 
-  if (config.PROD) {
-    app.use(
-      enforceHttps({
-        trustProtoHeader: true,
-      }),
-    );
-  }
+  // if (config.PROD) {
+  //   app.use(
+  //     enforceHttps({
+  //       trustProtoHeader: true,
+  //     }),
+  //   );
+  // }
 
   app.use(helmet());
 
