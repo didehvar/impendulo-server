@@ -1,5 +1,6 @@
 const {
   APP_URL,
+  DATABASE_URL,
   HASURA_KEY,
   HASURA_URL,
   HTTPS,
@@ -12,6 +13,7 @@ const {
 
 const config = {
   APP_URL,
+  DATABASE_URL,
   DEV: NODE_ENV === 'development',
   HASURA_KEY,
   HASURA_URL,

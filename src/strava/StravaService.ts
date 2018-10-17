@@ -1,24 +1,21 @@
 import { toPairs } from 'lodash';
 import fetch from 'node-fetch';
+import * as PgBoss from 'pg-boss';
 import { URLSearchParams } from 'url';
 
 import config from 'src/config';
 import camelCaseObject from 'src/core/utils/camelCaseObject';
 import snakeCaseObject from 'src/core/utils/snakeCaseObject';
 import GraphQLService from 'src/core/GraphQLService';
+import Queues from 'src/core/Queues';
 
 import CreateSubscription from './interfaces/CreateSubscription';
 import Subscription from './interfaces/Subscription';
-import insertSubscriptions from './queries/insertSubscriptions';
 import WebhookEvent from './interfaces/WebhookEvent';
-import insertWebhooks from './queries/insertWebhooks';
+import insertSubscriptions from './queries/insertSubscriptions';
 
 class StravaService {
-  private graphql: GraphQLService;
-
-  constructor(graphqlSerice: GraphQLService) {
-    this.graphql = graphqlSerice;
-  }
+  constructor(private graphql: GraphQLService, private boss: PgBoss) {}
 
   async subscribeToWebhooks({
     callbackUrl,
@@ -66,10 +63,8 @@ class StravaService {
     });
   }
 
-  saveWebhook(event: WebhookEvent) {
-    return this.graphql.query(insertWebhooks, {
-      objects: [event],
-    });
+  saveWebhook(webhook: WebhookEvent) {
+    return this.boss.publish(Queues.StravaWebhooks, webhook);
   }
 }
 

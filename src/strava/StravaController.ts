@@ -36,13 +36,10 @@ class StravaController {
 
   webhook: Koa.Middleware = async ctx => {
     const event: StravaWebhookEvent = camelCaseObject(ctx.request.body);
-    const result = await this.service.saveWebhook({
+    ctx.body = await this.service.saveWebhook({
       ...event,
       eventTime: new Date(event.eventTime * 1000).toISOString(),
     });
-
-    if (result.errors) ctx.throw(500, 'Webhook failed to save');
-    ctx.body = result;
   };
 }
 

@@ -1,5 +1,10 @@
 import config from 'src/config';
-import { createContext, graphQLService, mockNext } from 'src/core/testHelpers';
+import {
+  boss,
+  createContext,
+  graphQLService,
+  mockNext,
+} from 'src/core/testHelpers';
 import camelCaseObject from 'src/core/utils/camelCaseObject';
 import { mocked } from 'ts-jest/utils';
 
@@ -8,7 +13,7 @@ import StravaService from './StravaService';
 
 jest.mock('./StravaService');
 
-const stravaService = new StravaService(graphQLService);
+const stravaService = new StravaService(graphQLService, boss);
 const serviceMock = mocked(stravaService);
 const controller = new StravaController(stravaService);
 
@@ -81,7 +86,12 @@ describe('webhook', () => {
 
   test('saves the webhook', async () => {
     await controller.webhook(context, mockNext);
-    expect(serviceMock.saveWebhook).toHaveBeenCalledWith(camelCaseObject(body));
+    expect(serviceMock.saveWebhook).toHaveBeenCalledWith(
+      camelCaseObject({
+        ...body,
+        event_time: new Date(body.event_time * 1000).toISOString(),
+      }),
+    );
   });
 
   test('responds with inserted ids', async () => {

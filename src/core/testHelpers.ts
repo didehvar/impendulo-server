@@ -1,14 +1,24 @@
 import { IncomingMessage, ServerResponse } from 'http';
 import * as Koa from 'koa';
+import fetch from 'node-fetch';
+import * as PgBoss from 'pg-boss';
+import * as pino from 'pino';
 import * as Stream from 'stream';
 import { mocked } from 'ts-jest/utils';
-import * as pino from 'pino';
 
 import GraphQLService from './GraphQLService';
 
+jest.mock('pino');
+jest.mock('pg-boss');
+jest.mock('node-fetch');
 jest.mock('src/core/GraphQLService');
 
 export const pinoMock = mocked(pino());
+export const fetchMock = mocked(fetch);
+export const boss = new PgBoss('');
+boss.publish = jest.fn(); // i don't get why these are missing send help
+export const bossMock = mocked(boss);
+
 export const graphQLService = new GraphQLService(pinoMock as any);
 export const graphQLMock = mocked(graphQLService);
 

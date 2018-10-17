@@ -1,23 +1,23 @@
 import { toPairs } from 'lodash';
-import fetch from 'node-fetch';
-import { mocked } from 'ts-jest/utils';
+import config from 'src/config';
+import {
+  boss,
+  bossMock,
+  fetchMock,
+  graphQLMock,
+  graphQLService,
+} from 'src/core/testHelpers';
+import snakeCaseObject from 'src/core/utils/snakeCaseObject';
+import Queues from 'src/core/Queues';
 import { URLSearchParams } from 'url';
 
-import config from 'src/config';
-import { graphQLMock, graphQLService } from 'src/core/testHelpers';
-import snakeCaseObject from 'src/core/utils/snakeCaseObject';
-
+import AspectType from './interfaces/AspectType';
+import ObjectType from './interfaces/ObjectType';
 import WebhookEvent from './interfaces/WebhookEvent';
 import insertSubscriptions from './queries/insertSubscriptions';
-import insertWebhooks from './queries/insertWebhooks';
 import StravaService from './StravaService';
-import ObjectType from './interfaces/ObjectType';
-import AspectType from './interfaces/AspectType';
 
-jest.mock('node-fetch');
-
-const fetchMock = mocked(fetch);
-const service = new StravaService(graphQLService);
+const service = new StravaService(graphQLService, boss);
 
 describe('subscribe', () => {
   const stravaSubscriptionId = 1;
@@ -80,7 +80,7 @@ describe('subscribe', () => {
 describe('saveWebhook', () => {
   const data: WebhookEvent = {
     aspectType: AspectType.Update,
-    eventTime: 1516126040,
+    eventTime: new Date(1516126040000).toISOString(),
     objectId: 1360128428,
     objectType: ObjectType.Activity,
     ownerId: 134815,
@@ -90,8 +90,6 @@ describe('saveWebhook', () => {
 
   test('saves the webhook', async () => {
     await service.saveWebhook(data);
-    expect(graphQLMock.query).toHaveBeenCalledWith(insertWebhooks, {
-      objects: [data],
-    });
+    expect(bossMock.publish).toHaveBeenCalledWith(Queues.StravaWebhooks, data);
   });
 });
